@@ -1,6 +1,6 @@
 # MTXGraphParser
 ## Description
-[MTXGraphParser] is a specialized tool designed for converting MTX (Matrix Market format) graphs into plain edge-list graphs. 
+MTXGraphParser is a specialized tool designed for converting MTX (Matrix Market format) graphs into plain edge-list graphs. 
 This project aims to simplify the process of handling MTX graph data, making it more accessible and usable in various applications that require edge-list formats.
 
 ## Features
