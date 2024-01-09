@@ -11,11 +11,11 @@ Graph Connectivity: Offers the feature to make the graph connected if the number
 ## Getting Started
 ### Installation
 ```shell
-    git clone https://github.com/Abhijeetkumar96/MTXGraphParser.git
-    # Navigate to the project directory
-    cd MTXGraphParser-master
-    # Compile the project using the make command:
-    make
+git clone https://github.com/Abhijeetkumar96/MTXGraphParser.git
+# Navigate to the project directory
+cd MTXGraphParser-master
+# Compile the project using the make command:
+make
 ```
 ## Usage
 ### Convert MTX to Edge List
