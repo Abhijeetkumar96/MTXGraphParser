@@ -21,18 +21,18 @@ Graph Connectivity: Offers the feature to make the graph connected if the number
 ### Convert MTX to Edge List
 To convert a .mtx file to an edge list, use the following command, replacing filename.mtx with the path to your MTX file:
 ```shell
-    ./mtxToEdgeList filename.mtx
+./mtxToEdgeList filename.mtx
 ```
 This will create an edge list from the specified .mtx file.
 ### Checking and Restoring Number of Components
 If the graph needs to be connected and the number of components is not one, use the following command to check and potentially modify the graph for connectivity. Replace filename.txt with the path to your edge list file:
 
 ```shell
-    ./EdgeAdderForConnectivity filename.txt
+./EdgeAdderForConnectivity filename.txt
 ```
 This step ensures that the graph is connected by modifying the original graph if necessary when the number of components is greater than one.
 
-##How to Cite
+## How to Cite
 If you use MTXGraphParser in your research or project, please consider citing it. Below is the citation format:
 
 Suggested Citation Format
