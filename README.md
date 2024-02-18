@@ -42,6 +42,21 @@ This command processes **myGraph.txt**, adding edges to ensure connectivity, and
 Make sure that the **output_path/** directory exists before running the command, or the tool may fail to save the output file. 
 You can create the directory using **`mkdir -p output_path/`** if necessary.
 
+# Future Features
+
+## In-Place File Update
+
+In a future release, we plan to introduce the capability to update graph files in place. This enhancement will allow users to apply modifications directly to the original file, eliminating the need for outputting to a separate file when not necessary.
+
+### Reminder:
+
+- This feature is under development and not yet available in the current version.
+- It aims to simplify workflows by reducing the steps required to apply changes.
+- Keep an eye on our release notes for updates on this and other new features.
+
+We appreciate your patience and are excited to bring more functionalities to improve your experience with our tools.
+
+
 ## How to Cite
 If you use MTXGraphParser in your research or project, please consider citing it. Below is the citation format:
 
