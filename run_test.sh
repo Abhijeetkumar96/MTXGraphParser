@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Define the directory containing .mtx files
-DIRECTORY="/home/graphwork/cs22s501/datasets/"
+# Update to the directory containing .mtx files
+DIRECTORY="/home/datasets/"
 
 # Loop through all .mtx files in the specified directory
 for file in "$DIRECTORY"*.mtx; do
