@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# Define the directory containing .mtx files
-DIRECTORY="/raid/graphwork/"
+# Update to the directory containing your .txt files
+DIRECTORY="/home/graphs/"
+# Update the output directory to store the processed files
+OUTPUT_DIR="/home/graphs/datasets/"
 
-# Loop through all .mtx files in the specified directory
+# Loop through all .txt files in the specified directory
 for file in "$DIRECTORY"*.txt; do
     echo "Processing $file..."
-    ./EdgeAdderForConnectivity "$file"
+    ./EdgeAdderForConnectivity "$file" "$OUTPUT_DIR"
 done
