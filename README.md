@@ -42,7 +42,7 @@ This command processes **myGraph.txt**, adding edges to ensure connectivity, and
 Make sure that the **output_path/** directory exists before running the command, or the tool may fail to save the output file. 
 You can create the directory using **`mkdir -p output_path/`** if necessary.
 
-##How to Cite
+## How to Cite
 If you use MTXGraphParser in your research or project, please consider citing it. Below is the citation format:
 
 Suggested Citation Format
