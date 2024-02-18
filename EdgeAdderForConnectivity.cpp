@@ -16,17 +16,20 @@
 #include <vector>
 #include <queue>
 
+#define DEBUG
+std::string output_path;
+
 // Function to perform breadth-first search (BFS)
-void bfs(int node, const std::vector<std::vector<int>>& adjList, std::vector<bool>& visited) {
-    std::queue<int> q;
+void bfs(long node, const std::vector<std::vector<long>>& adjList, std::vector<bool>& visited) {
+    std::queue<long> q;
     q.push(node);
     visited[node] = true;
 
     while (!q.empty()) {
-        int currNode = q.front();
+        long currNode = q.front();
         q.pop();
 
-        for (int neighbor : adjList[currNode]) {
+        for (long neighbor : adjList[currNode]) {
             if (!visited[neighbor]) {
                 q.push(neighbor);
                 visited[neighbor] = true;
@@ -36,18 +39,20 @@ void bfs(int node, const std::vector<std::vector<int>>& adjList, std::vector<boo
 }
 
 // Function to find the number of connected components in the graph
-int findConnectedComponents(const std::vector<std::vector<int>>& adjList, std::vector<std::pair<int, int>>& edgesToAdd) {
-    int numNodes = adjList.size();
+long findConnectedComponents(const std::vector<std::vector<long>>& adjList, std::vector<std::pair<long, long>>& edgesToAdd) {
+    long numNodes = adjList.size();
     std::vector<bool> visited(numNodes, false);
-    int numComponents = 0;
-    for (int node = 0; node < numNodes; ++node) {
+    long numComponents = 0;
+    long prev = -1; // Start with an invalid value indicating no previous component yet
+    for (long node = 0; node < numNodes; ++node) {
         if (!visited[node]) {
-            bfs(node, adjList, visited);
-            if(node != 0) {
-                edgesToAdd.push_back(std::make_pair(0, node));
-                edgesToAdd.push_back(std::make_pair(node, 0));
+            if (prev != -1) { // Ensure this is not the first component
+                edgesToAdd.push_back(std::make_pair(prev, node)); // Connect previous component to current
+                edgesToAdd.push_back(std::make_pair(node, prev)); // Connect previous component to current
             }
+            bfs(node, adjList, visited);
             numComponents++;
+            prev = node; // Update prev to the current node for the next component
         }
     }
 
@@ -55,60 +60,64 @@ int findConnectedComponents(const std::vector<std::vector<int>>& adjList, std::v
 }
 
 // Function to add new edges to the existing graph & update the numEdges
-void makeFullyConnected(const std::string filename, const std::vector<std::pair<int, int>>& edgesToAdd, int numVert, int numEdges) {
+void makeFullyConnected(
+    std::string filename, 
+    const std::vector<std::pair<long, long>>& edgesToAdd,
+    const std::vector<std::vector<long>>& adjList,
+    long numVert, long numEdges) {
 
-    numEdges+= edgesToAdd.size();
-     // Step 1: Overwrite the starting line if the length is the same
-    std::fstream file(filename, std::ios::in | std::ios::out);
-    if (file.is_open()) {
-        file.seekp(0, std::ios::beg); // Move to the beginning of the file
-        file << numVert <<" " << numEdges << std::endl; // Overwrite the first line
-        file.close();
-    } else {
-        std::cerr << "Unable to open file." << std::endl;
+    numEdges += edgesToAdd.size();
+    filename= output_path + filename;
+    std::ofstream outFile(filename);
+    if(!outFile) {
+        std::cerr <<"Unable to open file for writing.\n";
         return;
     }
 
-    // Open the file in append mode
-    std::ofstream outFile(filename, std::ios::app);
-
-    if (outFile.is_open()) {
-        for(const auto &i : edgesToAdd)
-            outFile << i.first <<" " << i.second << std::endl;
-        outFile.close();
-    } else {
-        std::cerr << "Unable to open file for appending." << std::endl;
+    outFile << numVert <<" " << numEdges <<"\n";
+    for(long i = 0; i < numVert; ++i) {
+        for(long j = 0; j < adjList[i].size(); ++j) {
+            outFile << i <<" " << adjList[i][j] <<"\n";
+        }
     }
+
+    for(long i = 0; i < edgesToAdd.size(); ++i) 
+        outFile << edgesToAdd[i].first <<" " << edgesToAdd[i].second <<"\n";
 }
 
 int main(int argc, char* argv[]) {
     std::ios_base::sync_with_stdio(false);
-    if(argc < 2)
-    {
-        std::cerr << "Usage : " << argv[0] <<" filename ";
+    if(argc < 3) {
+        std::cerr << "Usage : " << argv[0] <<" filename " <<" output_path" << std::endl;
         return 0;
     }
+
     std::string filename = argv[1];
+    output_path = argv[2];
+
     std::ifstream inputFile(filename);
 
     if (inputFile.is_open()) {
-        int numNodes, numEdges;
+        long numNodes, numEdges;
         inputFile >> numNodes >> numEdges;
 
-        std::vector<std::vector<int>> adjList(numNodes);
+        std::vector<std::vector<long>> adjList(numNodes);
 
-        for (int i = 0; i < numEdges; ++i) {
-            int u, v;
+        for (long i = 0; i < numEdges; ++i) {
+            long u, v;
             inputFile >> u >> v;
             if(u == v)
                 continue;
             adjList[u].push_back(v);
+            // adjList[v].push_back(u);
         }
+
+        // numEdges *= 2;
 
         inputFile.close();
 
         #ifdef DEBUG
-            for(int i = 0; i < adjList.size(); ++i) {
+            for(size_t i = 0; i < adjList.size(); ++i) {
                 std::cout << i <<" : ";
                 for(auto const& j : adjList[i])
                     std::cout << j <<" ";
@@ -116,11 +125,11 @@ int main(int argc, char* argv[]) {
             }
         #endif
 
-        std::vector<std::pair<int, int>> edgesToAdd;
-        int numComponents = findConnectedComponents(adjList, edgesToAdd);
+        std::vector<std::pair<long, long>> edgesToAdd;
+        long numComponents = findConnectedComponents(adjList, edgesToAdd);
 
         if(numComponents > 1)
-            makeFullyConnected(filename, edgesToAdd, numNodes, numEdges);
+            makeFullyConnected(filename, edgesToAdd, adjList, numNodes, numEdges);
 
         #ifdef DEBUG
             std::cout <<"edgesToAdd size = " << edgesToAdd.size() << std::endl;
